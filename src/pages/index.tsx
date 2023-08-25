@@ -11,7 +11,8 @@ export default function Home(props) {
   const [newTask, setNewTask] = useState<ITask>({
     taskName: '',
     isCompleted: false,
-    taskId: 0
+    taskId: 0,
+    children: []
   })
 
   useEffect(() => {
@@ -32,11 +33,25 @@ export default function Home(props) {
   const handleTaskCompletion = (taskId: number) => {
     const task = taskList.find((task) => task.taskId === taskId)
     if(!task) return taskList;
+
     const taskIndex = taskList.indexOf(task)
     const newTaskList: ITask[] = taskList;
     newTaskList.splice(taskIndex, 1)
     const taskStatus = !task.isCompleted
     newTaskList.push({...task, isCompleted: taskStatus})
+    updateTaskList(newTaskList)
+  }
+
+  const handleChildrenAppend = (childrenId: number, parentId: number) => {
+    const task = taskList.find((task) => task.taskId === parentId)
+    if(!task) throw Error("Parent not found")
+    const childrenTask = taskList.find((task) => task.taskId === childrenId)
+    task.children = [...task.children, childrenTask]
+
+    const taskIndex = taskList.indexOf(task)
+    const newTaskList: ITask[] = taskList;
+    newTaskList[taskIndex] = task;
+
     updateTaskList(newTaskList)
   }
 

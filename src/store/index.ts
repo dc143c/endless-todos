@@ -27,7 +27,6 @@ export const store = create(
   ),
 )
 
-
 export const useHydratedStore = <T extends keyof OmittedFunctionKeys<InitialState>>(key: T)
   : OmittedFunctionKeys<InitialState>[T] => {
   const [state, setState] = useState(initialState[key]);
