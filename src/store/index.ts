@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { type ITask } from "~/components/Task";
+import { type IParentTask } from "~/components/Task";
 
 type InitialState = {
-  taskList: ITask[]
-  updateTaskList: (taskList: ITask[]) => void;
+  taskList: IParentTask[]
+  taskCount: number
+  updateTaskList: (taskList: IParentTask[]) => void;
+  incrementCount: () => void;
 }
 
 const initialState = {
-  taskList: [] as ITask[],
+  taskList: [] as IParentTask[],
+  taskCount: 0
 }
 
 export const store = create(
   persist<InitialState>((set) => ({
       taskList: [],
-      updateTaskList: (taskList: ITask[]) => set((state: InitialState) => ({
+      taskCount: 0,
+      updateTaskList: (taskList: IParentTask[]) => set((state: InitialState) => ({
         ...state,
         taskList
       })),
+      incrementCount: () => set((state: InitialState) => ({
+        ...state,
+        taskCount: state.taskCount + 1
+      }))
     }),
     {
       name: 'task-storage', // name of the item in the storage (must be unique)
